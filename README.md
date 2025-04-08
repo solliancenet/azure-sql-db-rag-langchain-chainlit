@@ -1,6 +1,6 @@
 # Azure SQL DB, Langchain, LangGraph and Chainlit
 
-Sample RAG pattern using Azure SQL DB, Langchain and Chainlit as demonstrated in the [#RAGHack](https://github.com/microsoft/RAG_Hack) conference. Full details and video recording available here: [RAG on Azure SQL Server](https://github.com/microsoft/RAG_Hack/discussions/53).
+Sample Retrieval-Augmented Generation (RAG) pattern using Azure SQL DB, Langchain and Chainlit as demonstrated in the [#RAGHack](https://github.com/microsoft/RAG_Hack) conference. Full details and video recording available here: [RAG on Azure SQL Server](https://github.com/microsoft/RAG_Hack/discussions/53).
 
 The sample is build using plain LangChain (`app.py`) or using LangGraph (`app-langgraph.py`) to define the RAG process.
 
