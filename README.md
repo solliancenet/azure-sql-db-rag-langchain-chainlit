@@ -33,13 +33,13 @@ To deploy the database, you can either use the provided .NET 8 Core console appl
 To use the .NET 8 Core console application, change directories into the `/database` and then make sure to create a `.env` file in the `/database` folder starting from the `.env.example` file:
 
 - `MSSQL`: the connection string to the Azure SQL database where you want to deploy the database objects and sample data
-- `OPENAI_URL`: specify the URL of your Azure OpenAI endpoint, eg: 'https://my-open-ai.openai.azure.com/'
+- `OPENAI_URL`: specify the URL of your Azure OpenAI endpoint, eg: '<https://my-open-ai.openai.azure.com/>'
 - `OPENAI_KEY`: specify the API key of your Azure OpenAI endpoint
 - `OPENAI_MODEL`: specify the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-3-small'
 
 If you want to deploy the database manually, make sure to execute the script in the `/database/sql` folder in the order specifed by the number in the file name. Some files (`020-security.sql` and `060-get_embedding.sql`) with have placeholders that you have to replace with your own values:
 
-- `$OPENAI_URL$`: replace with the URL of your Azure OpenAI endpoint, eg: 'https://my-open-ai.openai.azure.com/'
+- `$OPENAI_URL$`: replace with the URL of your Azure OpenAI endpoint, eg: '<https://my-open-ai.openai.azure.com/>'
 - `$OPENAI_KEY$`: replace with the API key of your Azure OpenAI endpoint
 - `$OPENAI_MODEL$`: replace with the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-3-small'
 
