@@ -1,18 +1,42 @@
-insert into web.speakers
-    (id, full_name, require_embeddings_update)
-values
-    (5000, 'John Doe', 0)
-go
+/* Script for populating the database with sample speaker and session data. */
 
-declare @t as nvarchar(max), @e as vector(1536)
-select @t = full_name from web.speakers where id = 5000
-exec web.get_embedding @t, @e output
-update web.speakers set embeddings = @e where id = 5000
-go
+/* SPEAKERS */
+-- Insert sample speaker data into the web.speakers table.
+-- The require_embeddings_update column is set to 1 to indicate that embeddings need to be generated for these speakers.
+INSERT INTO web.speakers (id, full_name, require_embeddings_update) 
+VALUES 
+    (5000, 'John Doe', 1),
+    (5001, 'Jane Smith', 1);
+GO
 
-insert into web.sessions 
-    (id, title, abstract, external_id, start_time, end_time, require_embeddings_update)
-values
+-- Generate embeddings for the speakers' full name.
+DECLARE @id int, @full_name NVARCHAR(max), @embeddings vector(1536);
+
+DECLARE speaker_cursor CURSOR FOR
+SELECT id, full_name FROM web.speakers WHERE require_embeddings_update = 1;
+
+OPEN speaker_cursor;
+FETCH NEXT FROM speaker_cursor INTO @id, @full_name;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    EXEC web.get_embedding @full_name, @embeddings OUTPUT;
+    UPDATE web.speakers
+    SET 
+        embeddings = @embeddings,
+        require_embeddings_update = 0
+    WHERE id = @id;
+
+    FETCH NEXT FROM speaker_cursor INTO @id, @full_name;
+END;
+CLOSE speaker_cursor;
+DEALLOCATE speaker_cursor;
+GO
+
+/* SESSIONS */
+-- Insert sample session data into the web.sessions table.
+-- The require_embeddings_update column is set to 1 to indicate that embeddings need to be generated for these sessions.
+INSERT INTO web.sessions (id, title, abstract, external_id, start_time, end_time, require_embeddings_update)
+VALUES
     (
         1000,
         'Building a session recommender using OpenAI and Azure SQL', 
@@ -20,25 +44,8 @@ values
         'S1',
         '2024-06-01 10:00:00',
         '2024-06-01 11:00:00',
-        0
-    )
-go
-
-declare @t as nvarchar(max), @e as vector(1536)
-select @t = title + ':' + abstract from web.sessions where id = 1000
-exec web.get_embedding @t, @e output
-update web.sessions set embeddings = @e where id = 1000
-go
-
-insert into web.sessions_speakers
-    (session_id, speaker_id)
-values
-    (1000, 5000)
-go
-
-insert into web.sessions 
-    (id, title, abstract, external_id, start_time, end_time, require_embeddings_update)
-values
+        1
+    ),
     (
         1001,
         'Unlock the Art of Pizza Making with John Doe!', 
@@ -46,26 +53,8 @@ values
         'S2',
         '2024-06-01 11:00:00',
         '2024-06-01 12:00:00',
-        0
-    )
-go
-
-declare @t as nvarchar(max), @e as vector(1536)
-select @t = title + ':' + abstract from web.sessions where id = 1001
-exec web.get_embedding @t, @e output
-update web.sessions set embeddings = @e where id = 1001
-go
-
-insert into web.sessions_speakers
-    (session_id, speaker_id)
-values
-    (1001, 5000)
-go
-
-
-insert into web.sessions 
-    (id, title, abstract, external_id, start_time, end_time, require_embeddings_update)
-values
+        1
+    ),
     (
         1002,
         'RAG on Azure SQL', 
@@ -73,18 +62,53 @@ values
         'R1',
         '2024-09-05 16:00:00',
         '2024-09-05 17:00:00',
-        0
-    )
-go
+        1
+    ),
+    (
+        1003,
+        'Bring your own data with OpenAI',
+        'In this session you''ll learn how to use your own private data with OpenAI. We''ll cover the basics of how to retrieve data from an Azure SQL database, how to use it with OpenAI using the RAG pattern, and some best practices improving performance when performing retrieval-augmented generation (RAG).',
+        'R2',
+        '2024-09-05 14:00:00',
+        '2024-09-05 15:00:00',
+        1
+    );
+GO
 
-declare @t as nvarchar(max), @e as vector(1536)
-select @t = title + ':' + abstract from web.sessions where id = 1002
-exec web.get_embedding @t, @e output
-update web.sessions set embeddings = @e where id = 1002
-go
+-- Generate embeddings for the sessions' title and abstract.
+-- The embeddings are stored in the embeddings column, and the require_embeddings_update column is set to 0 to indicate that embeddings have been generated.
+DECLARE @id int, @title NVARCHAR(max), @abstract NVARCHAR(max), @text_to_embed NVARCHAR(max), @embeddings vector(1536);
 
-insert into web.sessions_speakers
-    (session_id, speaker_id)
-values
-    (1002, 5000)
-go
+DECLARE session_cursor CURSOR FOR
+SELECT id, title, abstract FROM web.sessions WHERE require_embeddings_update = 1;
+
+OPEN session_cursor;
+FETCH NEXT FROM session_cursor INTO @id, @title, @abstract;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    SET @text_to_embed = @title + ':' + @abstract; -- Concatenate title and abstract for embedding generation
+    EXEC web.get_embedding @text_to_embed , @embeddings OUTPUT;
+    UPDATE web.sessions
+    SET 
+        embeddings = @embeddings,
+        require_embeddings_update = 0
+    WHERE id = @id;
+
+    FETCH NEXT FROM session_cursor INTO @id, @title, @abstract;
+END;
+CLOSE session_cursor;
+DEALLOCATE session_cursor;
+GO
+
+/* SPEAKERS SESSIONS */
+-- Insert sample data into the web.sessions_speakers table to establish a many-to-many relationship between sessions and speakers.
+TRUNCATE TABLE web.sessions_speakers; -- Clear existing data in the sessions_speakers table
+GO
+INSERT INTO web.sessions_speakers (session_id, speaker_id)
+VALUES
+    (1000, 5000), -- John Doe and Jane Smith are speakers for session 1000
+    (1001, 5000), -- John Doe is a speaker for session 1001
+    (1002, 5000), -- John Doe is a speaker for session 1002
+    (1002, 5001), -- Jane Smith is a speaker for session 1002
+    (1003, 5001); -- Jane Smith is a speaker for session 1003
+GO
