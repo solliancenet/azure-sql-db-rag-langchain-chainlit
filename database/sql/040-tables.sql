@@ -1,3 +1,23 @@
+/*
+    This script creates the tables for the web application, including the searched_text, sessions,
+    speakers, and sessions_speakers tables.
+*/
+
+/*
+    Table name: searched_text
+    Description: 
+        This table stores the searched text, the date and time of the search, and the performance
+        metrics for the search.
+*/
+DROP TABLE IF EXISTS [web].[searched_text];
+GO
+DROP TABLE IF EXISTS [web].[sessions_speakers];
+GO
+DROP TABLE IF EXISTS [web].[speakers];
+GO
+DROP TABLE IF EXISTS [web].[sessions];
+GO
+
 CREATE TABLE [web].[searched_text]
 (
     [id] INT IDENTITY (1, 1) NOT NULL,
@@ -11,6 +31,12 @@ CREATE TABLE [web].[searched_text]
 );
 GO
 
+/*
+    Table name: sessions
+    Description: 
+        This table stores the session information, including the title, abstract, external ID,
+        last fetched date and time, start and end times, tags, recording URL, and embeddings.
+*/
 CREATE TABLE [web].[sessions]
 (
     [id] INT DEFAULT (NEXT VALUE FOR [web].[global_id]) NOT NULL,
@@ -31,6 +57,12 @@ CREATE TABLE [web].[sessions]
 );
 GO
 
+/*
+    Table name: speakers
+    Description: 
+        This table stores the speaker information, including the external ID, full name,
+        require_embeddings_update flag, and embeddings.
+*/
 CREATE TABLE [web].[speakers]
 (
     [id] INT DEFAULT (NEXT VALUE FOR [web].[global_id]) NOT NULL,
@@ -44,6 +76,12 @@ CREATE TABLE [web].[speakers]
 );
 GO
 
+/*
+    Table name: sessions_speakers
+    Description: 
+        This table establishes a many-to-many relationship between sessions and speakers.
+        It contains the session ID and speaker ID as foreign keys.
+*/
 CREATE TABLE [web].[sessions_speakers] (
     [session_id] INT NOT NULL,
     [speaker_id] INT NOT NULL,
@@ -54,6 +92,9 @@ CREATE TABLE [web].[sessions_speakers] (
 );
 GO
 
+/* 
+    Create non-clustered indexes on the sessions_speakers tables to improve query performance.
+*/
 CREATE NONCLUSTERED INDEX [ix2]
     ON [web].[sessions_speakers]([speaker_id] ASC);
 GO
