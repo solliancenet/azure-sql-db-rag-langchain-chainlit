@@ -1,6 +1,6 @@
 # Azure SQL DB, Langchain, LangGraph and Chainlit
 
-Sample Retrieval-Augmented Generation (RAG) pattern using Azure SQL DB, Langchain and Chainlit as demonstrated in the [#RAGHack](https://github.com/microsoft/RAG_Hack) conference. Full details and video recording available here: [RAG on Azure SQL Server](https://github.com/microsoft/RAG_Hack/discussions/53).
+This project contains a sample Chainlit (Python) application that uses the Retrieval-Augmented Generation (RAG) pattern against data stored in Azure SQL DB. The application uses LangChain and Chainlit as demonstrated in the [#RAGHack](https://github.com/microsoft/RAG_Hack) conference. Full details and video recording available here: [RAG on Azure SQL Server](https://github.com/microsoft/RAG_Hack/discussions/53).
 
 The sample is build using plain LangChain (`app.py`) or using LangGraph (`app-langgraph.py`) to define the RAG process.
 
@@ -12,7 +12,7 @@ The sample is build using plain LangChain (`app.py`) or using LangGraph (`app-la
 
 The solution works locally and in Azure. It is composed of three main Azure components:
 
-- [Azure SQL Database](https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-database-paas-overview?view=azuresql): The database that stores the data.
+- [Azure SQL Database](https://learn.microsoft.com/azure/azure-sql/database/sql-database-paas-overview?view=azuresql): The Azure SQL database that stores application data.
 - [Azure Open AI](https://learn.microsoft.com/azure/ai-services/openai/): Hosts the language models for generating embeddings and completions.
 - [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-csharp): The serverless function to automate the process of generating the embeddings (this is optional for this sample)
 
@@ -22,6 +22,10 @@ Before getting started, make sure to have two models deployed, one for generatin
 
 - Embedding model: `text-embedding-ada-002`
 - Chat model: `gpt-4o`
+
+TODO: Add links to pages where regions supporting the above models can be identified.
+
+TODO: Add short section on using Azure AI Foundry to create/verify model deployments.
 
 ### Database
 
@@ -37,13 +41,43 @@ To use the .NET 8 Core console application, change directories into the `/databa
 - `OPENAI_KEY`: specify the API key of your Azure OpenAI endpoint
 - `OPENAI_MODEL`: specify the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-3-small'
 
-If you want to deploy the database manually, make sure to execute the script in the `/database/sql` folder in the order specifed by the number in the file name. Some files (`020-security.sql` and `060-get_embedding.sql`) with have placeholders that you have to replace with your own values:
+To run the .NET 8 Core console application:
+
+1. Open a new terminal windows in VS Code.
+
+2. AzLogin
+
+    ```bash
+    az login
+    ```
+
+3. At the terminal prompt, change directories to the `/database` folder:
+
+    ```bash
+    cd database
+    ```
+
+4. Build the database project:
+
+    ```bash
+    dotnet build
+    ```
+
+5. Run the database project:
+
+    ```bash
+    dotnet run
+    ```
+
+If you prefer to deploy the database manually, make sure to execute the scripts in the `/database/sql` folder in the order specifed by the number in the file name. Some files (`020-security.sql` and `060-get_embedding.sql`) have placeholders that you must replace with your own values:
 
 - `$OPENAI_URL$`: replace with the URL of your Azure OpenAI endpoint, eg: '<https://my-open-ai.openai.azure.com/>'
 - `$OPENAI_KEY$`: replace with the API key of your Azure OpenAI endpoint
-- `$OPENAI_MODEL$`: replace with the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-3-small'
+- `$OPENAI_MODEL$`: replace with the deployment name of your Azure OpenAI embedding model, eg: 'text-embedding-ada-002'
 
 ### Chainlit
+
+TODO: Update instructions for anyone using codespaces, as the venv will have already been created and the requirements.txt file will have been installed in the venv. (will still need to activate the .venv before running chainlit command...)
 
 Chainlit solution is in `chainlit` folder. Move into the folder, create a virtual environment and install the requirements:
 
@@ -55,13 +89,21 @@ pip install -r requirements.txt
 
 or, on Windows:
 
-```PowerShell
+```powershell
 python -m venv .venv
-.venv/Script/activate
+.venv\Script\activate
 pip install -r requirements.txt
 ```
 
-Then ensure you create an `.env` file in the `/chainlit` folder starting from the `.env.example` file and it with the values for your environment. Then, run the chainlit solution:
+Then ensure you create an `.env` file in the `/chainlit` folder starting from the `.env.example` file and it with the values for your environment.
+
+TODO: Need to talk about how to put together the correct connection string when not using SQL auth. Using Entra ID, they will not need the `Uid` or `Password` parameters...
+
+```ini
+AZURE_SQL_CONNECTION_STRING='Driver={ODBC Driver 18 for SQL Server};Server=tcp:[YOUR_SQL_SERVER_NAME].database.windows.net,1433;Database=[YOUR_DATABASE_NAME];Encrypt=yes;Connection Timeout=30;'
+```
+
+Then, run the chainlit solution:
 
 ```bash
 chainlit run app.py
@@ -87,9 +129,9 @@ The RAG process is defined using Langchain's LCEL [Langchain Expression Language
 
 ### Azure Functions (optional)
 
-In order to automate the process of generating the embeddings, you can use the Azure Functions. Thanks to [Azure SQL Trigger Binding](https://learn.microsoft.com/azure/azure-functions/functions-bindings-azure-sql-trigger), it is  possible to have tables monitored for changes and then react to those changes by executing some code in the Azure Function itself. As a result it is possible to automate the process of generating the embeddings and storing them in the database.
+In order to automate the process of generating the embeddings, you can use the Azure Functions. Thanks to [Azure SQL Trigger Binding](https://learn.microsoft.com/azure/azure-functions/functions-bindings-azure-sql-trigger), it is possible to have tables monitored for changes and then react to those changes by executing some code in the Azure Function itself. As a result, it is possible to automate the process of generating the embeddings and storing them in the database.
 
-In a perfect microservices architecture, the Azure Functions are written in C#, but you can easily create the same solutoin using Python, Node.js or any other supported language.
+In a perfect microservices architecture, the Azure Functions are written in C#, but you can easily create the same solution using Python, Node.js or any other supported language.
 
 The Azure Functions solution is in the `azure-functions` folder. Move into the folder, then create a `local.settings.json` starting from the provided `local.settings.json.example` file and fill it with your own values. Then run the Azure Functions locally (make sure to have the [Azure Function core tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local) installed):
 

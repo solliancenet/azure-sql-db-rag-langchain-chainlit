@@ -16,8 +16,8 @@
         "vscode": {
             "extensions": [
                 "ms-azuretools.vscode-azurefunctions",
-                "ms-azuretools.vscode-bicep",
                 "ms-azuretools.vscode-docker",
+                "ms-dotnettools.csdevkit",
                 "ms-dotnettools.csharp",
                 "ms-dotnettools.dotnet-interactive-vscode",
                 "ms-dotnettools.vscode-dotnet-runtime",
@@ -26,6 +26,9 @@
             ]
         }
     },
-    "postCreateCommand": "cd ./chainlit && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt",
-    "remoteUser": "vscode"
+    "postStartCommand": "cd ./chainlit && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt",
+    "remoteUser": "vscode",
+    "forwardPorts": [
+        8000
+    ]
 }
