@@ -14,7 +14,13 @@ infra:
   bicep: ./infra/main.bicep
 hooks:
   preprovision:
-    shell: pwsh
-    continueOnError: false
-    interactive: true
-    run: ./infra/azd-hooks/preprovision.ps1
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: false
+      run: ./infra/azd-hooks/preprovision.sh
+    windows:
+      shell: pwsh
+      continueOnError: false
+      interactive: false
+      run: ./infra/azd-hooks/preprovision.ps1  
