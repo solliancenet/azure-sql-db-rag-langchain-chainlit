@@ -1,0 +1,20 @@
+name: azure-sql-rag-app
+metadata:
+  location: ${AZURE_REGION}
+  environment: ${AZURE_ENVIRONMENT}
+  subscription: ${AZURE_SUBSCRIPTION_ID}
+  clientIpAddress: ${CLIENT_IP_ADDRESS}
+  principalName: ${PRINCIPAL_NAME}
+workflows:
+  up:
+    steps:
+      - azd: provision
+      - azd: deploy
+infra:
+  bicep: ./infra/main.bicep
+hooks:
+  preprovision:
+    shell: pwsh
+    continueOnError: false
+    interactive: true
+    run: ./infra/azd-hooks/preprovision.ps1
