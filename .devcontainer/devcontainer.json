@@ -30,7 +30,7 @@
             ]
         }
     },
-    "postStartCommand": "cd ./chainlit && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt",
+    "postStartCommand": "cd ./chainlit && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
     "remoteUser": "vscode",
     "forwardPorts": [
         8000
