@@ -30,7 +30,7 @@
             ]
         }
     },
-    "postStartCommand": "cd ./chainlit && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
+    "postStartCommand": "chmod +x ./infra/azd-hooks/preprovision.sh && cd ./chainlit && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
     "remoteUser": "vscode",
     "forwardPorts": [
         8000
