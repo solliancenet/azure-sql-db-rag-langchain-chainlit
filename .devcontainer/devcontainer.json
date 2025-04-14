@@ -20,24 +20,22 @@
         "vscode": {
             "extensions": [
                 "ms-azuretools.vscode-azurefunctions",
-                //"ms-azuretools.vscode-azureresourcegroups",
+                "ms-azuretools.vscode-azureresourcegroups",
                 "ms-azuretools.vscode-bicep",
                 "ms-azuretools.vscode-docker",
                 "ms-dotnettools.csdevkit",
                 "ms-dotnettools.csharp",
-                //"ms-dotnettools.dotnet-interactive-vscode",
                 "ms-dotnettools.vscode-dotnet-runtime",
                 "ms-python.python",
                 "ms-python.debugpy",
-                "ms-mssql.mssql",
-                "ms-vscode.azure-account"
+                "ms-mssql.mssql"
             ],
             "settings": {
                 "python.defaultInterpreterPath": "./chainlit/.venv/bin/python"
             }
         }
     },
-    "postCreateCommand": "chmod +x ./infra/azd-hooks/preprovision.sh && npm install -g azure-functions-core-tools@4 --unsafe-perm true",
+    "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true && chmod +x ./infra/azd-hooks/preprovision.sh",
     "postStartCommand": "cd ./chainlit && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
     "remoteUser": "vscode",
     "forwardPorts": [
