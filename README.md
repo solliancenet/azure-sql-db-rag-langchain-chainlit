@@ -105,7 +105,7 @@ To use the .NET 8 Core console application, change directories into the `/databa
 - `MSSQL`: the connection string to the Azure SQL database where you want to deploy the database objects and sample data
 - `OPENAI_URL`: specify the URL of your Azure OpenAI endpoint, eg: '<https://my-open-ai.openai.azure.com/>'
 - `OPENAI_KEY`: specify the API key of your Azure OpenAI endpoint
-- `OPENAI_MODEL`: specify the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-3-small'
+- `OPENAI_MODEL`: specify the deployment name of your Azure OpenAI embedding endpoint, eg: 'text-embedding-ada-002'
 
 To run the .NET 8 Core console application:
 
