@@ -35,7 +35,8 @@
             }
         }
     },
-    "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true && chmod +x ./infra/azd-hooks/preprovision.sh",
+    "onCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true",
+    "postCreateCommand": "chmod +x ./infra/azd-hooks/preprovision.sh",
     "postStartCommand": "cd ./chainlit && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
     "remoteUser": "vscode",
     "forwardPorts": [
