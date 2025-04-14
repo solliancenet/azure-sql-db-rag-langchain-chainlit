@@ -6,6 +6,21 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:azureFunctions.pickProcess}"
+        },
+        {
+            "name": "Chainlit Debugger (Windows)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/chainlit/.venv/Scripts/chainlit.exe",
+            "args": [
+                "run",
+                "${workspaceFolder}/chainlit/app.py"
+            ],
+            "jinja": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/chainlit"
+            },
+            "python": "${workspaceFolder}/chainlit/.venv/Scripts/python.exe",
         }
     ]
 }
