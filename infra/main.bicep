@@ -72,7 +72,7 @@ module openAi 'openai.bicep' = {
   params: {
     deployments: [
       {
-        name: 'completions'
+        name: openAiCompletionsModel
         sku: {
           name: 'Standard'
           capacity: 10
@@ -83,7 +83,7 @@ module openAi 'openai.bicep' = {
         }
       }
       {
-        name: 'embeddings'
+        name: openAiEmbeddingsModel
         sku: {
           name: 'Standard'
           capacity: 10
