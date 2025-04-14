@@ -13,6 +13,9 @@
         "ghcr.io/devcontainers/features/dotnet:2": "8.0",
         "ghcr.io/devcontainers/features/git:1": {},
         "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
         "ghcr.io/devcontainers/features/powershell:1": {}
     },
     "customizations": {
@@ -21,18 +24,23 @@
                 "ms-azuretools.vscode-azurefunctions",
                 "ms-azuretools.vscode-bicep",
                 "ms-azuretools.vscode-docker",
+                "ms-azuretools.vscode-azureresourcegroups",
                 "ms-dotnettools.csdevkit",
                 "ms-dotnettools.csharp",
                 "ms-dotnettools.dotnet-interactive-vscode",
                 "ms-dotnettools.vscode-dotnet-runtime",
                 "ms-python.python",
-                "ms-vscode.azure-account"
-            ]
+                "ms-mssql.mssql"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "./chainlit/.venv/bin/python"
+            }
         }
     },
     "postStartCommand": "chmod +x ./infra/azd-hooks/preprovision.sh && npm install -g azure-functions-core-tools@4 --unsafe-perm true && cd ./chainlit && python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt",
     "remoteUser": "vscode",
     "forwardPorts": [
+        7071,
         8000
     ]
 }
