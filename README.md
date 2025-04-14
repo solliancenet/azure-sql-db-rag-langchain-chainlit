@@ -212,3 +212,13 @@ func start
 The Azure Function will monitor the configured tables for changes and automatically call the Azure OpenAI endpoint to generate the embeddings for the new or updated data.
 
 TODO: Add short section on adding new records to the database and what flag needs to be set to true for the function app to pick it up and generate embeddings.
+
+## Cleanup
+
+If you used the Azure Developer CLI template to deploy resources to try out this solution, you should delete those resources to avoid incurring costs in your Azure subscription.
+
+To delete the resources created for this solution, run the following from a terminal windows in VS Code:
+
+```azurecli
+azd down --purge
+```
