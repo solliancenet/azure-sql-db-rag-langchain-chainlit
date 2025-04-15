@@ -37,7 +37,7 @@
             }
         }
     },
-    "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true && chmod +x ./infra/azd-hooks/preprovision.sh && chmod +x install_odbc.sh && install_odbc.sh",
+    "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true && chmod +x ./infra/azd-hooks/preprovision.sh",
     "remoteUser": "vscode",
     "forwardPorts": [
         7071,
