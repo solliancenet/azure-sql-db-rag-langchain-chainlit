@@ -68,11 +68,6 @@
 			}
 		},
 		{
-            "label": "Install Azure Functions Tools",
-            "type": "shell",
-            "command": "npm install -g azure-functions-core-tools@4 --unsafe-perm true"
-        },
-		{
 			"type": "func",
 			"dependsOn": "build (functions)",
 			"options": {
