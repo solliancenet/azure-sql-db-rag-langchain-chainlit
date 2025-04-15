@@ -8,7 +8,7 @@ from azure import identity
 def get_mssql_connection(source_variable_name: str) -> pyodbc.Connection:
     logging.info('Getting MSSQL connection')
     mssql_connection_string = os.environ[source_variable_name]    
-    if any(s in mssql_connection_string.lower() for s in ["uid"]):
+    if any(s in mssql_connection_string.lower() for s in ["uid"]) and any(s in mssql_connection_string.lower() for s in ["pwd"]):
         logging.info('Using SQL Server authentication')
         attrs_before = None
     else:
