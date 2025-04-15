@@ -183,7 +183,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 ```
 
-AI instructions are **static**in this approach, meaning the assistant responds **based only on this template**. This structure ensures that the AI assistant stays **focused** on retrieving conference session information, but it **limits dynamic adaptability** since the conversation flow is fixed.
+AI instructions are **static** in this approach, meaning the assistant responds **based only on this template**. This structure ensures that the AI assistant stays **focused** on retrieving conference session information, but it **limits dynamic adaptability** since the conversation flow is fixed.
 
 **Data Retrieval**:
 
