@@ -7,34 +7,34 @@ from azure import identity
 
 def get_mssql_connection(source_variable_name: str) -> pyodbc.Connection:
     logging.info('Getting MSSQL connection')
-    mssql_connection_string = os.environ[source_variable_name]    
+    mssql_connection_string = os.environ[source_variable_name]
     if any(s in mssql_connection_string.lower() for s in ["uid"]) and any(s in mssql_connection_string.lower() for s in ["pwd"]):
         logging.info('Using SQL Server authentication')
         attrs_before = None
     else:
-        logging.info('Getting EntraID credentials...')            
-        credential = identity.DefaultAzureCredential(exclude_interactive_browser_credential=False)    
-        token_bytes = credential.get_token("https://database.windows.net/.default").token.encode("UTF-16-LE")    
+        logging.info('Getting EntraID credentials...')
+        credential = identity.DefaultAzureCredential(exclude_interactive_browser_credential=False)
+        token_bytes = credential.get_token("https://database.windows.net/.default").token.encode("UTF-16-LE")
         token_struct = struct.pack(f'<I{len(token_bytes)}s', len(token_bytes), token_bytes)
-        SQL_COPT_SS_ACCESS_TOKEN = 1256  # This connection option is defined by microsoft in msodbcsql.h        
+        SQL_COPT_SS_ACCESS_TOKEN = 1256  # This connection option is defined by microsoft in msodbcsql.h
         attrs_before = {SQL_COPT_SS_ACCESS_TOKEN: token_struct}
 
-    logging.info('Connecting to MSSQL...')    
+    logging.info('Connecting to MSSQL...')
     conn = pyodbc.connect(mssql_connection_string, attrs_before=attrs_before)
-    logging.info('Connected to MSSQL.')    
+    logging.info('Connected to MSSQL.')
 
     return conn
 
 def get_similar_sessions(topic:str) -> str:
     """
     Use this function to get a list of sessions that are potentially relevant for the specified topic.
-    The sessions are provided in the format of `id|title|abstract|speakers|start-time|end-time`. 
+    The sessions are provided in the format of `id|title|abstract|speakers|start-time|end-time`.
     """
     conn = get_mssql_connection("AZURE_SQL_CONNECTION_STRING")
     logging.info("Querying MSSQL...")
     logging.info(f"Topic: '{topic}'")
-    try:        
-        cursor = conn.cursor()            
+    try:
+        cursor = conn.cursor()
         results = cursor.execute("SET NOCOUNT ON; EXEC web.find_sessions @text=?", (topic)).fetchall()
 
         logging.info(f"Found {len(results)} similar sessions.")
@@ -42,13 +42,13 @@ def get_similar_sessions(topic:str) -> str:
         payload = ""
         for row in results:
             description = str(row[2]).replace("\n", " ")
-            speakers = ", ".join(json.loads(row[7]))    
-            payload += f'{row[0]}|{row[1]}|{description}|{speakers}|{row[4]}|{row[5]}' 
+            speakers = ", ".join(json.loads(row[7]))
+            payload += f'{row[0]}|{row[1]}|{description}|{speakers}|{row[4]}|{row[5]}'
             payload += "\n"
-    
-        return payload    
+
+        return payload
     finally:
-        cursor.close()    
+        cursor.close()
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
