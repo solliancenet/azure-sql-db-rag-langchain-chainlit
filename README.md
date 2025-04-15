@@ -307,7 +307,7 @@ The Chainlit application provides a simple Python-based chat interface for inter
     sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc unixodbc-dev
     ```
 
-9.  Then, run the chainlit solution:
+9. Then, run the chainlit solution:
 
     ```bash
     chainlit run app.py
@@ -321,8 +321,8 @@ The Chainlit application provides a simple Python-based chat interface for inter
 
 10. Once the application is running, you can ask questions about your data and get the answer from the Azure OpenAI model. For example, you can ask questions about the session topics you have in the database:
 
-   - Are there any sessions on retrieval-augmented generation?
-   - Show me sessions featuring Azure SQL.
+    - Are there any sessions on retrieval-augmented generation?
+    - Show me sessions featuring Azure SQL.
 
 You'll see that Langchain will call the function `get_similar_sessions` that, behind the scenes, connects to the database and executes the stored procedure `web.find_sessions`, which performs vector search on database data.
 
