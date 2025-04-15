@@ -220,7 +220,19 @@ cl.user_session.set("runnable", runnable)
 The fully generated response is returned to the user, ending the interaction cycle and ensuring Chainlit updates the chat window.
 
 ```python
-await response_message.send()
+@cl.on_message
+async def on_message(message: cl.Message):
+    runnable = cl.user_session.get("runnable")  # type: Runnable
+    
+    response_message = cl.Message(content="")
+
+    for chunk in await cl.make_async(runnable.stream)(
+        input=message.content,
+        config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),
+    ):
+        await response_message.stream_token(chunk)
+
+    await response_message.send()
 ```
 
 ### `app-langgraph.py`
