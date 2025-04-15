@@ -233,19 +233,27 @@ If your tables do not contain embeddings, you must manually rerun the `040-table
 
 The Chainlit application provides a simple Python-based chat interface for interacting with data in your database. The Chainlit solution is located in the `chainlit` folder. To get started with the application:
 
-1. Open a new integrated terminal in VS Code and change directories to the `/chainlit` folder.
+1. Open a new integrated terminal in VS Code.
+
+2. Sign into Azure using the Azure CLI:
+
+    ```bash
+    az login
+    ```
+
+3. Change directories to the `/chainlit` folder.
 
     ```bash
     cd chainlit
     ```
 
-2. Create a Python virtual environment named `.venv`:
+4. Create a Python virtual environment named `.venv`:
 
     ```bash
     python -m venv .venv
     ```
 
-3. Activate the virtual environment:
+5. Activate the virtual environment:
 
     On Windows:
 
@@ -259,13 +267,13 @@ The Chainlit application provides a simple Python-based chat interface for inter
     source .venv/bin/activate
     ```
 
-4. Install the required Python libraries from the `requirements.txt` file:
+6. Install the required Python libraries from the `requirements.txt` file:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-5. In the VS Code Solution Explorer, navigate to the `/chainlit` folder, create a `.env` file, starting from the `.env.example` file, and populate it with the values for your environment.
+7. In the VS Code Solution Explorer, navigate to the `/chainlit` folder, create a `.env` file, starting from the `.env.example` file, and populate it with the values for your environment.
 
     Microsoft Entra ID Auth is required if you used the Azure Developer CLI template to deploy your database. Therefore, your `AZURE_SQL_CONNECTION_STRING` variable should look like the following, with the `[YOUR_SQL_SERVER_NAME]` token replaced with the name of your SQL server in Azure. If you named your database differently, you must also update the `Database` value.
 
@@ -273,7 +281,7 @@ The Chainlit application provides a simple Python-based chat interface for inter
     AZURE_SQL_CONNECTION_STRING='Driver={ODBC Driver 18 for SQL Server};Server=tcp:[YOUR_SQL_SERVER_NAME].database.windows.net,1433;Database=sessiondb;Encrypt=yes;Connection Timeout=30;'
     ```
 
-6. If you are using codespaces, you must install the ODBC Driver for SQL Server on the container:
+8. If you are using codespaces, you must install the ODBC Driver for SQL Server on the container:
 
     ```bash
     sudo su
@@ -299,7 +307,7 @@ The Chainlit application provides a simple Python-based chat interface for inter
     sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc unixodbc-dev
     ```
 
-7. Then, run the chainlit solution:
+9.  Then, run the chainlit solution:
 
     ```bash
     chainlit run app.py
@@ -311,7 +319,7 @@ The Chainlit application provides a simple Python-based chat interface for inter
     chainlit run app-langgraph.py
     ```
 
-8. Once the application is running, you can ask questions about your data and get the answer from the Azure OpenAI model. For example, you can ask questions about the session topics you have in the database:
+10. Once the application is running, you can ask questions about your data and get the answer from the Azure OpenAI model. For example, you can ask questions about the session topics you have in the database:
 
    - Are there any sessions on retrieval-augmented generation?
    - Show me sessions featuring Azure SQL.
