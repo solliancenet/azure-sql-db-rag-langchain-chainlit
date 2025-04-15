@@ -381,3 +381,15 @@ If you want to save any changes you have made to files, use the Source Control t
 1. In the Azure portal, select the resource group to which you deployed resources.
 
 2. Delete the resource group.
+
+## Code walkthoughh
+
+Refer to the [code walkthrough document](walkthrough.md) for a details explanation of the code structure and how the different compontents work together.
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
